@@ -6,21 +6,16 @@
 
 
 module.exports = {
-  // purge: {
-  //   content: [
-  //     'components/FormView.vue',
-  //   ],
-  // },
   content: [
-    // './src/**/*.{html,js,vue}',
-    // './node_modules/@formkit/themes/dist/tailwindcss/genesis/index.cjs',
   ],
   theme: {
     extend: {
+      // fontFamily: {
+      //   display: ['Inter', 'serif'],
+      // },
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
       },
     },
   },
-  // plugins: [FormKitVariants],
 }

@@ -1,0 +1,54 @@
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseKey = 'YOUR_SUPABASE_KEY';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Create a new Todo
+const createTodo = async (title) => {
+  const { data, error } = await supabase.from('todo_list').insert([{ title }]);
+  if (error) {
+    console.error('Error creating todo:', error);
+  } else {
+    console.log('Todo created:', data);
+  }
+};
+
+// Read all Todos
+const fetchTodos = async () => {
+  const { data, error } = await supabase.from('todo_list').select('*');
+  if (error) {
+    console.error('Error fetching todos:', error);
+  } else {
+    console.log('Todos:', data);
+  }
+};
+
+// Update a Todo
+const updateTodo = async (id, updates) => {
+  const { data, error } = await supabase
+    .from('todo_list')
+    .update(updates)
+    .match({ id });
+  if (error) {
+    console.error('Error updating todo:', error);
+  } else {
+    console.log('Todo updated:', data);
+  }
+};
+
+// Delete a Todo
+const deleteTodo = async (id) => {
+  const { data, error } = await supabase.from('todo_list').delete().match({ id });
+  if (error) {
+    console.error('Error deleting todo:', error);
+  } else {
+    console.log('Todo deleted:', data);
+  }
+};
+
+// Usage examples
+createTodo('Buy groceries');
+fetchTodos();
+updateTodo('todo_id', { title: 'Updated todo' });
+deleteTodo('todo_id');

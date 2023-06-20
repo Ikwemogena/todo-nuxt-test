@@ -4,8 +4,16 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@formkit/nuxt",
+    "@nuxtjs/supabase",
   ],
-  formkit: {
-    configFile: './formkit.config.js',
+  // supabase: {
+  runtimeConfig: {
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY,
   },
+  // supabase: {
+  //   url: process.env.SUPABASE_URL,
+  //   key: process.env.SUPABASE_KEY,
+
+  // }
 })
