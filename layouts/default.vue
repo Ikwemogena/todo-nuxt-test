@@ -14,14 +14,34 @@
                 </ul>
                 </div>
                 <!-- Profile section  -->
-                <div class="p-4 flex">
+                <div>
+          <div class="p-4 flex items-center" v-if="user">
+            <img class="w-12 h-12 rounded-full" src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?cs=srgb&dl=pexels-mohamed-abdelghaffar-771742.jpg&fm=jpg" alt="Profile Image">
+            <div class="ml-3">
+              <h4 class="text-lg font-semibold">{{ user.name }}</h4>
+              <p class="text-gray-500 text-sm">{{ user.email }}</p>
+            </div>
+            <img src="../assets/icons/more-icon.svg" alt="">
+          </div>
+          <div class="p-4 flex" v-else>
+            <div class="flex justify-center items-center p-5">
+              <NuxtLink to="/login">Sign In</NuxtLink>
+            </div>
+          </div>
+        </div>
+                <!-- <div class="p-4 flex">
                     <img class="w-12 h-12 rounded-full" src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?cs=srgb&dl=pexels-mohamed-abdelghaffar-771742.jpg&fm=jpg" alt="Profile Image">
                     <div class="ml-3">
                         <h4 class="text-lg font-semibold">John Doe</h4>
                         <p class="text-gray-500">john.doe@example.com</p>
                     </div>
                     <img src="../assets/icons/more-icon.svg" alt="">
-                </div>
+                </div> -->
+                <!-- <div class="p-4 flex">
+                    <div class="bg-black text-teal-700 flex justify-center items-center p-5">
+                        <NuxtLink to="/sign-up">Sign In</NuxtLink>
+                    </div>
+                </div> -->
             </aside>
             <main class="flex-1">
                 <!-- Main content goes here -->
@@ -36,7 +56,26 @@
 </template>
 
 <script setup>
+import supabase from '~/server/api/supabase.js';
 
+const user = ref(null);
+
+onMounted(() => {
+  // Wait for the client to initialize before accessing $supabase
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      user.value = session.user;
+    } else {
+      user.value = null;
+    }
+  });
+
+  // Check initial authentication state
+  const session = supabase.auth.session;
+  if (session) {
+    user.value = session.user;
+  }
+});
 </script>
 
 <style scoped>

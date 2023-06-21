@@ -87,10 +87,13 @@
 <script setup>
 
 // create new task in db
-import { createClient } from '@supabase/supabase-js';
-const supabaseUrl = 'https://fkvnvhdjidzlfhimwqpo.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrdm52aGRqaWR6bGZoaW13cXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcyMjM0NzUsImV4cCI6MjAwMjc5OTQ3NX0.wcN8iPzD4e_0sueun1BAs4puPc6vbPg4OMQdFf3MLy4'
-const supabase = createClient(supabaseUrl, supabaseKey);
+// import { createClient } from '@supabase/supabase-js';
+// const supabaseUrl = 'https://fkvnvhdjidzlfhimwqpo.supabase.co'
+// const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrdm52aGRqaWR6bGZoaW13cXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcyMjM0NzUsImV4cCI6MjAwMjc5OTQ3NX0.wcN8iPzD4e_0sueun1BAs4puPc6vbPg4OMQdFf3MLy4'
+// const supabase = createClient(supabaseUrl, supabaseKey);
+import supabase from '~/server/api/supabase.js';
+
+const user = supabase.auth.user;
 
 // let showModal = ref(false);
 let newTodoText = ref('');
@@ -123,43 +126,107 @@ function togglePriority() {
 }
 
 
+// async function addTodo() {
+
+//   const user = supabase.auth.user();
+
+//   // Log the form data
+//   if (user) {
+//     // Log the form data
+//     const formData = {
+//       title: newTodoText.value,
+//       description: description.value,
+//       category: categories.value,
+//       priority: priority.value,
+//       reminder: new Date(date.value).toISOString(),
+//       user_id: user.id, // Add the user's ID to the form data
+//     }
+//   // const formData = {
+//   //   title: newTodoText.value,
+//   //   description: description.value,
+//   //   category: categories.value,
+//   //   priority: priority.value,
+//   //   reminder: new Date(date.value).toISOString(),
+//   //   // color: color.value,
+//   // };
+
+//   console.log('New Task:', formData);
+
+//   // Reset the form inputs
+//   newTodoText.value = '';
+//   description.value = '';
+//   priorityToggle.value = false;
+//   date.value = '';
+//   color.value = '#ffffff';
+
+//   // Close the form
+//   showModal.value = false;
+
+//   try {
+//     const { data, error } = await supabase
+//       .from('todo_list')
+//       .insert([formData]);
+
+//     if (error) {
+//       console.error('Error creating task:', error);
+//     } else {
+//       console.log('Task created successfully');
+//     }
+//   } catch (error) {
+//     console.error('Error creating task:', error);
+//   }
+// }
+
 async function addTodo() {
-  // Log the form data
-  const formData = {
-    title: newTodoText.value,
-    description: description.value,
-    category: categories.value,
-    priority: priority.value,
-    reminder: new Date(date.value).toISOString(),
-    // color: color.value,
-  };
+  
+  console.log(user)
 
-  console.log('New Task:', formData);
+  // Check if the user is signed in
+  if (user) {
+    // Log the form data
+    const formData = {
+      title: newTodoText.value,
+      description: description.value,
+      category: categories.value,
+      priority: priority.value,
+      reminder: new Date(date.value).toISOString(),
+      user_id: user.id, // Add the user's ID to the form data
+    };
 
-  // Reset the form inputs
-  newTodoText.value = '';
-  description.value = '';
-  priorityToggle.value = false;
-  date.value = '';
-  color.value = '#ffffff';
+    console.log('New Task:', formData);
 
-  // Close the form
-  showModal.value = false;
+    // Reset the form inputs
+    newTodoText.value = '';
+    description.value = '';
+    priorityToggle.value = false;
+    date.value = '';
+    color.value = '#ffffff';
 
-  try {
-    const { data, error } = await supabase
-      .from('todo_list')
-      .insert([formData]);
+    // Close the form
+    showModal.value = false;
 
-    if (error) {
+    try {
+      const { data, error } = await supabase
+        .from('todo_list')
+        .insert([formData]);
+
+      if (error) {
+        console.error('Error creating task:', error);
+      } else {
+        console.log('Task created successfully');
+      }
+    } catch (error) {
       console.error('Error creating task:', error);
-    } else {
-      console.log('Task created successfully');
     }
-  } catch (error) {
-    console.error('Error creating task:', error);
+    
+  }
+  else {
+    // Handle the case when the user is not signed in
+    console.log('User is not signed in');
+    // You can show an error message or redirect the user to the sign-in page
   }
 }
+
 
 async function deleteTodo() {
   try {

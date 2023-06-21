@@ -69,55 +69,97 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
 const options = ref(['All', 'Completed', 'In progress', 'Archive']);
 const selectedOption = ref('All');
+const todo_list = ref([]);
 
 function selectOption(option) {
   selectedOption.value = option;
 }
-import { createClient } from '@supabase/supabase-js';
-// const supabaseUrl = 'YOUR_SUPABASE_URL';
-// const supabaseKey = 'YOUR_SUPABASE_PUBLIC_KEY';
-// const { supabaseUrl, supabaseKey} = useRuntimeConfig()
-const supabaseUrl = 'https://fkvnvhdjidzlfhimwqpo.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrdm52aGRqaWR6bGZoaW13cXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcyMjM0NzUsImV4cCI6MjAwMjc5OTQ3NX0.wcN8iPzD4e_0sueun1BAs4puPc6vbPg4OMQdFf3MLy4'
-const supabase = createClient(supabaseUrl, supabaseKey);
 
-
-
-let { data: todo_list, error } = await supabase
-  .from('todo_list')
-  .select('*')
-
-  console.log(todo_list)
-
-
-async function updateToDo(item) {
-  try {
-    const { data, error } = await supabase
-      .from('todo_list')
-      .update({ completed: item.completed })
-      .match({ id: item.id });
-
-    if (error) {
-      console.error('Error updating task:', error);
-    } else {
-      console.log('Task updated successfully');
-    }
-  } catch (error) {
-    console.error('Error updating task:', error);
-  }
-}
 
 const filteredTodoList = computed(() => {
   if (selectedOption.value === 'Completed') {
-    return todo_list.filter((item) => item.completed);
+    return todo_list.value.filter((item) => item.completed);
   } else if (selectedOption.value === 'In progress') {
-    return todo_list.filter((item) => !item.completed);
+    return todo_list.value.filter((item) => !item.completed);
   } else {
-    return todo_list;
+    return todo_list.value;
   }
 });
+
+
+
+// import supabase from '~/server/api/supabase.js';
+// const options = ref(['All', 'Completed', 'In progress', 'Archive']);
+// const selectedOption = ref('All');
+
+// function selectOption(option) {
+//   selectedOption.value = option;
+// }
+
+// const user = supabase.auth.user; 
+
+
+
+// let { data: todo_list, error } = await supabase
+//   .from('todo_list')
+//   .select('*')
+//   .eq('user_id', user.id); 
+
+//   console.log(todo_list)
+
+
+// async function updateToDo(item) {
+//   try {
+//     const { data, error } = await supabase
+//       .from('todo_list')
+//       .update({ completed: item.completed })
+//       .match({ id: item.id });
+
+//     if (error) {
+//       console.error('Error updating task:', error);
+//     } else {
+//       console.log('Task updated successfully');
+//     }
+//   } catch (error) {
+//     console.error('Error updating task:', error);
+//   }
+// }
+
+// const filteredTodoList = computed(() => {
+//   if (selectedOption.value === 'Completed') {
+//     return todo_list.filter((item) => item.completed);
+//   } else if (selectedOption.value === 'In progress') {
+//     return todo_list.filter((item) => !item.completed);
+//   } else {
+//     return todo_list;
+//   }
+// });
+
+
+// onMounted(async () => {
+//   // Wait for the client to initialize before accessing $supabase
+//   await supabase.auth.refreshSession();
+//   user.value = supabase.auth.user();
+
+//   if (user.value) {
+//     // Fetch tasks only if a user is authenticated
+//     const { data, error } = await supabase
+//       .from('todo_list')
+//       .select('*')
+//       .eq('user_id', user.value.id);
+
+//     if (error) {
+//       console.error('Error fetching tasks:', error);
+//     } else {
+//       todo_list = data;
+//     }
+//   }
+// });
 
 
 

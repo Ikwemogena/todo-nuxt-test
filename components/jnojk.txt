@@ -52,3 +52,86 @@ createTodo('Buy groceries');
 fetchTodos();
 updateTodo('todo_id', { title: 'Updated todo' });
 deleteTodo('todo_id');
+
+
+
+
+FLOWCHART
+start
+|
+v
+[User opens the app]
+|
+v
+[Fetch tasks from Supabase]
+|
+v
+[Display tasks in the UI]
+|
+v
+[User creates a new task]
+|
+v
+[Send task data to Supabase]
+|
+v
+[Update task list]
+|
+v
+[User updates a task]
+|
+v
+[Send updated task data to Supabase]
+|
+v
+[Update task list]
+|
+v
+[User marks a task as completed]
+|
+v
+[Send updated task data to Supabase]
+|
+v
+[Update task list]
+|
+v
+[User deletes a task]
+|
+v
+[Send delete request to Supabase]
+|
+v
+[Update task list]
+|
+v
+[Real-time updates from Supabase]
+|
+v
+[Update task list in real-time]
+|
+v
+end
+
+
+
+Start
+├── User visits the sign-in page
+├── User enters their credentials (email/username and password)
+│   ├── User submits the form
+│   │   ├── Validate the entered credentials
+│   │   │   ├── Credentials are valid
+│   │   │   │   ├── Send a request to the Supabase authentication endpoint
+│   │   │   │   │   ├── Supabase verifies the credentials
+│   │   │   │   │   │   ├── Credentials are valid
+│   │   │   │   │   │   │   ├── Generate an authentication token
+│   │   │   │   │   │   │   ├── Store the authentication token securely (e.g., in a session or cookie)
+│   │   │   │   │   │   │   ├── Retrieve user details from Supabase (optional)
+│   │   │   │   │   │   │   ├── Redirect the user to the application dashboard
+│   │   │   │   │   │   ├── Credentials are invalid
+│   │   │   │   │   │   │   ├── Display an error message to the user
+│   │   │   ├── Credentials are invalid
+│   │   │   │   └── Display an error message to the user
+│   │   └── End
+│   └── End
+└── End
